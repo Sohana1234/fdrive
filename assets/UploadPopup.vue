@@ -14,6 +14,7 @@ const progressValue = ref(0);
 const fileElement = ref('');
 const cwd=new URL(window.location).searchParams.get("p") || "";
 const cancelToken=ref(null);
+const uniqueLinkCopy=ref('');
 const linkCopied=ref(false);
 
 function chooseFile() {
@@ -43,7 +44,6 @@ function generateUniqueId() {
 }
 
 async function uploadFile() {
-debugger;
  const file = fileInput.value.files[0];
  console.log("file",file);
   if (!file) return;
@@ -75,6 +75,7 @@ debugger;
  }
     try{
     const uniqueDir = generateUniqueId();
+	uniqueLinkCopy.value=uniqueDir
   const uploadUrl = `/api/write/items/${cwd}${uniqueDir}/${file.name}`;
   const headers = {};
   cancelToken.value=axios.CancelToken.source();
@@ -131,6 +132,9 @@ debugger;
       });     
     }
 
+function retryUpload(){
+state.value=0;
+}
 
 
 
@@ -240,7 +244,7 @@ function resetModal() {
           <h2 class="modal__title">Oops!</h2>
           <p class="modal__message">Your file could not be uploaded due to an error. Try uploading it again?</p>
           <div class="modal__actions modal__actions--center">
-            <button class="modal__button" type="button" @click="uploadFile">Retry</button>
+            <button class="modal__button" type="button" @click="retryUpload">Retry</button>
             <button class="modal__button" type="button" @click="cancelUpload">Cancel</button>
           </div>
         </div>
@@ -248,7 +252,7 @@ function resetModal() {
           <h2 class="modal__title">Upload Successful!</h2>
           <p class="modal__message">Your file has been uploaded. You can copy the link to your clipboard.</p>
           <div class="modal__actions modal__actions--center">
-		     <button class="modal__button" type="button" @click="copyLink(`/raw/${fileElement}`)">
+		     <button class="modal__button" type="button" @click="copyLink(`/raw/${uniqueLinkCopy}/${fileElement}`)">
                   <template v-if="linkCopied">
                     <svg class="modal__icon modal__icon--green" viewBox="0 0 24 24" width="16px" height="16px" aria-hidden="true">
                       <g fill="none" stroke="hsl(138, 90%, 50%)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
