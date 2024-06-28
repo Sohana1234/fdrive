@@ -290,8 +290,8 @@ function resetModal() {
 	width: calc(100% - 3em);
 	max-width: 34.5em;
 	overflow: hidden;
-	left:33%;
-	top:14rem;
+	left:30%;
+	top:11rem;
 	position: relative;
 	transition:
 		background-color var(--trans-dur),
@@ -593,6 +593,7 @@ function resetModal() {
 
 /* Beyond mobile */
 @media (min-width: 768px) {
+
 	.modal__actions--center {
 		justify-content: center;
 		margin-left: -4.125em;
@@ -628,4 +629,27 @@ function resetModal() {
 		text-align: left;
 	}
 }
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  .modal{
+    left: 24%;
+    top: 9rem;
+  }
+}
+@media only screen and (orientation : landscape) and (-webkit-min-device-pixel-ratio: 1) and (min-device-width : 768px) and (max-device-width : 1007px)
+{
+    .modal{
+    left: 13%;
+    
+    }
+  }
+  @media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px)
+{ 
+    .modal{
+    left: 7%;
+    top: 5rem;  
+    }
+ }
+ 
 </style>
