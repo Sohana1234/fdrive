@@ -8,9 +8,9 @@ async function getCurrentBucket(context) {
   if (!(await env[driveid].head("_$flaredrive$/CNAME")))
     await env[driveid].put("_$flaredrive$/CNAME", url.hostname);
 
-  const client = new S3Client('8f70c6c6a8d964bec51abcf4b57022a4', '0fecc90f43f15f0230ee16b12ba84cd7e6580c61df576fa055c52cf58182c891');
+  const client = new S3Client(env.AWS_ACCESS_KEY_ID, env.AWS_SECRET_ACCESS_KEY);
   const bucketsResponse = await client.s3_fetch(
-    'https://416c8dfd48d7017aa7d3dc38412356ca.r2.cloudflarestorage.com/'
+    `https://${env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
   );
   const bucketsText = await bucketsResponse.text();
   const bucketNames = [
@@ -22,7 +22,7 @@ async function getCurrentBucket(context) {
         new Promise<string>((resolve, reject) => {
           client
             .s3_fetch(
-              `https://416c8dfd48d7017aa7d3dc38412356ca.r2.cloudflarestorage.com/${name}/_$flaredrive$/CNAME`
+              `https://${env.CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${name}/_$flaredrive$/CNAME`
             )
             .then((response) => response.text())
             .then((text) => {
