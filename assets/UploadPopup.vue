@@ -45,7 +45,7 @@ function generateUniqueId() {
 
 async function uploadFile() {
  const file = fileInput.value.files[0];
- console.log("file",file);
+ 
   if (!file) return;
    state.value = 1;
     progressValue.value=0;
@@ -54,23 +54,22 @@ async function uploadFile() {
 	try {
      const thumbnailBlob = await generateThumbnail(file);
      const digestHex = await blobDigest(thumbnailBlob);
-     console.log("digesthex",digestHex);
-     console.log("thumbnailBlob",thumbnailBlob);
+    
      const thumbnailUploadUrl = `/api/write/items/_$flaredrive$/thumbnails/${digestHex}.png`;
       try {
             await axios.put(thumbnailUploadUrl, thumbnailBlob);
             thumbnailDigest = digestHex;
-            console.log("thumbnailDigest",thumbnailDigest);
+     
           } catch (error) {
             fetch("/api/write/")
               .then((value) => {
                 if (value.redirected) window.location.href = value.url;
               })
               .catch(() => {});
-            console.log(`Upload ${digestHex}.png failed`);
+  
           }
 	}catch(error){
-        console.log(`Generate thumbnail failed`);
+        console.error(`Generate thumbnail failed`);
 	}
  }
     try{
@@ -80,7 +79,7 @@ async function uploadFile() {
   const headers = {};
   cancelToken.value=axios.CancelToken.source();
     if (thumbnailDigest) headers["fd-thumbnail"] = thumbnailDigest;
-        console.log("size_limit",SIZE_LIMIT);
+    
      if (file.size >= SIZE_LIMIT) {
         await multipartUpload(`${cwd}${uniqueDir}/${file.name}`,file,{
             headers,
@@ -117,7 +116,6 @@ async function uploadFile() {
           })
           .catch(() => {});
 		  state.value = 2; 
-        console.log(`Upload ${file.name} failed`, error);
     }
   }
 
@@ -233,7 +231,7 @@ function resetModal() {
 	
                 <div class="modal__progress-value" data-progress-value>{{ progressValue }}%</div>
                    <div class="modal__progress-bar">
-                      <div class="modal__progress-fill" :style="{ transform: `scaleX(${progressValue / 100})` }"></div>
+                      <div class="modal__progress-fill"  :style="{ transform: `scaleX(${progressValue / 100})` }"></div>
                    </div>
                 </div>
                <button class="modal__button" type="button" @click="cancelUpload">Cancel</button>
@@ -277,14 +275,23 @@ function resetModal() {
 
 
 <style>
+:root {
+	--hue: 223;
+	--bg: hsl(var(--hue),10%,85%);
+	--fg: hsl(var(--hue),10%,5%);
+	--trans-dur: 0.3s;
+	font-size: calc(16px + (20 - 16) * (100vw - 320px) / (2560 - 320));
+}
 .modal {
-	background-color: hsl(var(--hue),10%,95%);
+	background-color: hsl(0, 0%, 20%);
 	border-radius: 1em;
 	box-shadow: 0 0.75em 1em hsla(var(--hue),10%,5%,0.3);
 	color: hsl(var(--hue),10%,5%);
 	width: calc(100% - 3em);
 	max-width: 34.5em;
 	overflow: hidden;
+	left:33%;
+	top:14rem;
 	position: relative;
 	transition:
 		background-color var(--trans-dur),
@@ -327,7 +334,7 @@ function resetModal() {
 	-webkit-tap-highlight-color: transparent;
 }
 .modal__button {
-	background-color: hsla(var(--hue),10%,50%,0.2);
+	background-color: #808080;
 	border-radius: 0.25rem;
 	font-size: 0.75em;
 	padding: 0.5rem 2rem;
@@ -336,6 +343,7 @@ function resetModal() {
 		border-color var(--trans-dur),
 		opacity var(--trans-dur);
 	width: 100%;
+	color:#FFFFFF;
 }
 .modal__button + .modal__button {
 	margin-top: 0.75em;
@@ -353,32 +361,27 @@ function resetModal() {
 }
 .modal__button--upload {
 	background-color: transparent;
-	border: 0.125rem dashed hsla(var(--hue),10%,50%,0.4);
+	border: 0.125rem dashed hsl(0, 0%, 60%);
 	flex: 1;
 	padding: 0.375rem 2rem;
+	color:#FFFFFF;
 }
 .modal__col + .modal__col {
 	flex: 1;
 	margin-top: 1.875em;
 }
-.modal__progress{
- width: 100%;
-  height: 20px;
-  background-color: #ccc; 
-  border-radius: 4px;
-}
-.modal__close-button,
-.modal__message,
 .modal__progress-value {
-	color: hsl(var(--hue),10%,30%);
+	color: #FFFFFF;
 	transition: color var(--trans-dur);
 }
+
 .modal__close-button {
 	background-color: transparent;
 	display: flex;
 	width: 1.5em;
 	height: 1.5em;
 	transition: color var(--trans-dur);
+	color:#808080
 }
 .modal__close-button:hover,
 .modal__close-button:focus-visible {
@@ -469,6 +472,7 @@ function resetModal() {
 	font-size: 1em;
 	margin-bottom: 1.5em;
 	min-height: 3em;
+	color:#808080;
 }
 .modal__progress {
 	flex: 1;
@@ -478,16 +482,16 @@ function resetModal() {
 }
 .modal__progress-bar {
 	background-image: linear-gradient(90deg,hsl(var(--hue),90%,50%),hsl(var(--hue),90%,70%));
-	border-radius:4px;
+	border-radius:0.2em;
 	overflow: hidden;
 	width: 100%;
-	height: 100%;
+	height: 0.4em;
 	transform: translate3d(0,0,0);
 }
 .modal__progress-fill {
 	background-color: hsl(var(--hue),10%,90%);
 	width: inherit;
-	height: 100%;
+	height: inherit;
 	transition: transform 0.1s ease-in-out;
 }
 .modal__progress-value {
@@ -508,6 +512,7 @@ function resetModal() {
 	line-height: 1.2;
 	margin-bottom: 1.5rem;
 	text-align: center;
+	color:#FFFFFF;
 }
 /* state change */
 [data-state="2"]:before {
@@ -552,8 +557,7 @@ function resetModal() {
 		background-color: hsl(var(--hue),10%,10%);
 		color: hsl(var(--hue),10%,95%);
 	}
-	.modal__close-button,
-	.modal__message,
+	.modal__close-button,	
 	.modal__progress-value {
 		color: hsl(var(--hue),10%,70%);
 	}
