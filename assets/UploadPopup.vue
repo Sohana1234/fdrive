@@ -92,9 +92,9 @@ async function uploadFile(file) {
         await multipartUpload(`${cwd}${uniqueDir}/${file.name}`,file,{
             headers,
             onUploadProgress: (progressEvent) => {
-			  if (progressEvent.total > 0) {
+			 
                 progressValue.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-				}
+			
 		        if (progressValue.value === 100) {
                    setTimeout(() => {
                         state.value = 3; 
