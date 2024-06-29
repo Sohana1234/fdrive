@@ -92,7 +92,6 @@ async function uploadFile(file) {
         await multipartUpload(`${cwd}${uniqueDir}/${file.name}`,file,{
             headers,
             onUploadProgress: (progressEvent) => {
-			  console.log("progressEvent",progressEvent);
 			  if (progressEvent.total > 0) {
                 progressValue.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 				}
@@ -109,10 +108,9 @@ async function uploadFile(file) {
         await axios.put(uploadUrl, file, {
         headers,
       onUploadProgress: (progressEvent) => {
-	  console.log("progressEventput",progressEvent);
-	  if (progressEvent.total > 0) {
+	 
         progressValue.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-		}
+		
 		if (progressValue.value === 100) {
           setTimeout(() => {
             state.value = 3; 
