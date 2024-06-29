@@ -275,6 +275,12 @@ function resetModal() {
 
 
 <style>
+* {
+	border: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 :root {
 	--hue: 223;
 	--bg: hsl(var(--hue),10%,85%);
@@ -282,6 +288,26 @@ function resetModal() {
 	--trans-dur: 0.3s;
 	font-size: calc(16px + (20 - 16) * (100vw - 320px) / (2560 - 320));
 }
+body,
+button {
+	font: 1em/1.5 Nunito, Helvetica, sans-serif;
+}
+
+body {
+	background-color: var(--bg);
+	color: var(--fg);
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition:
+		background-color var(--trans-dur),
+		color var(--trans-dur);
+	
+	margin:0;
+}
+
+
 .modal {
 	background-color: hsl(0, 0%, 20%);
 	border-radius: 1em;
@@ -290,12 +316,16 @@ function resetModal() {
 	width: calc(100% - 3em);
 	max-width: 34.5em;
 	overflow: hidden;
-	left:30%;
-	top:11rem;
-	position: relative;
+	
+	  position: fixed;
+      top: 50%;
+      left: 50%;
+     transform: translate(-50%, -50%);
 	transition:
 		background-color var(--trans-dur),
 		color var(--trans-dur);
+
+   
 }
 .modal:before {
 	background-color: hsl(223,90%,60%);
@@ -629,27 +659,6 @@ function resetModal() {
 		text-align: left;
 	}
 }
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-  .modal{
-    left: 24%;
-    top: 9rem;
-  }
-}
-@media only screen and (orientation : landscape) and (-webkit-min-device-pixel-ratio: 1) and (min-device-width : 768px) and (max-device-width : 1007px)
-{
-    .modal{
-    left: 13%;
-    
-    }
-  }
-  @media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px)
-{ 
-    .modal{
-    left: 6%;
-    top: 5rem;  
-    }
- }
+
  
 </style>
