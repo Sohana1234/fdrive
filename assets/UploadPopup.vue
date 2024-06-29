@@ -6,12 +6,11 @@ import {
   multipartUpload,
   SIZE_LIMIT,
 } from "/assets/main.mjs";
-const fileInput = ref(null);
+const fileInput = ref('');
 const modal = ref(null);
 const state = ref(0);
 const ready = ref(false);
 const progressValue = ref(0);
-const uploadfiles=ref(null);
 const fileElement = ref('');
 const cwd=new URL(window.location).searchParams.get("p") || "";
 const cancelToken=ref(null);
@@ -22,22 +21,14 @@ function chooseFile() {
   fileInput.value.click();
 }
 
-
 function handleFileChange(event) {
 
-  const file = event.target.files[0];
-  
-
+  const file = event.target.files[0]
+ 
   if (file) {
     ready.value = true;
-
-   fileElement.value=file.name;
-   uploadfiles.value=file;
-   if(uploadfiles){
-   uploadFile(uploadfiles.value);
-   }
+   fileElement.value=file.name
   }
-  
 }
 
 function removeFile() {
@@ -52,8 +43,9 @@ function generateUniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
 }
 
-
-async function uploadFile(file) { 
+async function uploadFile() {
+ const file = fileInput.value.files[0];
+ 
   if (!file) return;
    state.value = 1;
     progressValue.value=0;
@@ -92,9 +84,7 @@ async function uploadFile(file) {
         await multipartUpload(`${cwd}${uniqueDir}/${file.name}`,file,{
             headers,
             onUploadProgress: (progressEvent) => {
-			 
                 progressValue.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-			
 		        if (progressValue.value === 100) {
                    setTimeout(() => {
                         state.value = 3; 
@@ -108,9 +98,7 @@ async function uploadFile(file) {
         await axios.put(uploadUrl, file, {
         headers,
       onUploadProgress: (progressEvent) => {
-	 
         progressValue.value = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-		
 		if (progressValue.value === 100) {
           setTimeout(() => {
             state.value = 3; 
@@ -147,16 +135,6 @@ state.value=0;
 }
 
 
-function onDrop(event) {
-  event.preventDefault();
-  const files = event.dataTransfer.items
-    ? [...event.dataTransfer.items].filter((item) => item.kind === 'file').map((item) => item.getAsFile())
-    : event.dataTransfer.files;
-  if (files.length > 0) {
-    handleFileChange({ target: { files } });
-  }
-}
-
 
 function cancelUpload() {
   if(cancelToken){
@@ -189,7 +167,7 @@ function resetModal() {
         <span class="modal__sr">Close</span>
       </button>
     </div>
-    <div class="modal__body"  @dragenter.prevent @dragover.prevent @drop.prevent="onDrop">
+    <div class="modal__body">
       <div class="modal__col">
         <!-- up -->
         <svg class="modal__icon modal__icon--blue" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -242,7 +220,7 @@ function resetModal() {
               </svg>
               <span class="modal__sr">Remove</span>
             </button>
-            <button class="modal__button" type="button" @click="uploadFile(uploadfiles)">Upload</button>
+            <button class="modal__button" type="button" @click="uploadFile">Upload</button>
           </div>
         </div>
        <div class="modal__content" v-if="state === 1">
@@ -291,7 +269,7 @@ function resetModal() {
         </div>
       </div>
     </div>
-  </div>
+
 </template>
 
 
