@@ -1,8 +1,8 @@
-import {  parseBucketPath } from "@/utils/bucket";
+import { notFound, parseBucketPath } from "@/utils/bucket";
 
 export async function onRequestPostCreateMultipart(context) {
   const [bucket, path] = parseBucketPath(context);
-  
+  if (!bucket) return notFound();
 
   const request: Request = context.request;
 
@@ -27,7 +27,7 @@ export async function onRequestPostCreateMultipart(context) {
 
 export async function onRequestPostCompleteMultipart(context) {
   const [bucket, path] = parseBucketPath(context);
-
+  if (!bucket) return notFound();
 
   const request: Request = context.request;
   const url = new URL(request.url);
@@ -63,7 +63,7 @@ export async function onRequestPost(context) {
 
 export async function onRequestPutMultipart(context) {
   const [bucket, path] = parseBucketPath(context);
- 
+  if (!bucket) return notFound();
 
   const request: Request = context.request;
   const url = new URL(request.url);
@@ -95,7 +95,7 @@ export async function onRequestPut(context) {
   }
 
   const [bucket, path] = parseBucketPath(context);
-  
+  if (!bucket) return notFound();
 
   const request: Request = context.request;
 
@@ -124,7 +124,7 @@ export async function onRequestPut(context) {
 
 export async function onRequestDelete(context) {
   const [bucket, path] = parseBucketPath(context);
- 
+  if (!bucket) return notFound();
 
   await bucket.delete(path);
   return new Response(null, { status: 204 });
