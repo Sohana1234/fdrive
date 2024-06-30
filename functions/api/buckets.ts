@@ -49,7 +49,7 @@ export async function onRequestGet(context) {
       env.NEW_ACCESS_KEY_ID,
       env.NEW_SECRET_ACCESS_KEY
     );
-    if (url.searchParams.has("current")) return client.s3_fetch(`https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/uploader`
+    if (url.searchParams.has("current")) return client.s3_fetch(`https://uploader.${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
     );
 
     
