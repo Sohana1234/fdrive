@@ -8,7 +8,7 @@ export async function onRequest(context) {
     /.*\/api\/write\/s3\//,
     `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
   );
-
+  console.log("forwardUrl",forwardUrl,env)
   return client.s3_fetch(forwardUrl, {
     method: request.method,
     body: request.body,
