@@ -1,10 +1,9 @@
-import { notFound, parseBucketPath } from "@/utils/bucket";
+import {  parseBucketPath } from "@/utils/bucket";
 
 export async function onRequestGet(context) {
   try {
     const [bucket, path] = parseBucketPath(context);
     const prefix = path && `${path}/`;
-    if (!bucket || prefix.startsWith("_$flaredrive$/")) return notFound();
 
     const objList = await bucket.list({
       prefix,
