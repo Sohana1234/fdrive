@@ -21,10 +21,12 @@ export class S3Client {
   accessKeyId: string;
   secretAccessKey: string;
   region: string;
+  endpoint:string;
 
-  constructor(accessKeyId: string, secretAccessKey: string, region?: string) {
+  constructor(accessKeyId: string, secretAccessKey: string,endpoint:string, region?: string) {
     this.accessKeyId = accessKeyId;
     this.secretAccessKey = secretAccessKey;
+    this.endpoint=endpoint;
     this.region = region || "auto";
   }
 
@@ -101,4 +103,26 @@ export class S3Client {
     init.headers = headers;
     return fetch(input, init);
   }
+
+  public async createBucket(bucketName: string) {
+    const url = `${this.endpoint}/${bucketName}`;
+    const response = await this.s3_fetch(url, {
+      method: "PUT",
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to create bucket: ${response.statusText}`);
+    }
+    return response;
+  }
+
+  public async listBuckets() {
+    const url = this.endpoint;
+    const response = await this.s3_fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to list buckets: ${response.statusText}`);
+    }
+    return response;
+  }
+
+
 }
