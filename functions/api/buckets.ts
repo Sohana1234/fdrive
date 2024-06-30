@@ -1,5 +1,5 @@
 import { S3Client } from "@/utils/s3";
-import {listObjects} from '@/utils/aws';
+
 
 async function getCurrentBucket(context) {
   const { request, env } = context;
@@ -45,12 +45,14 @@ export async function onRequestGet(context) {
     const { request, env } = context;
 
     const url = new URL(request.url);
-    if (url.searchParams.has("current")) return await listObjects(context);
-
     const client = new S3Client(
       env.NEW_ACCESS_KEY_ID,
       env.NEW_SECRET_ACCESS_KEY
     );
+    if (url.searchParams.has("current")) return client.s3_fetch(`https://uploader.${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/_$flaredrive$/CNAME`
+    );
+
+    
     return client.s3_fetch(
       `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
     );
