@@ -1,3 +1,4 @@
+
 export function notFound() {
   return new Response("Not found", { status: 404 });
 }

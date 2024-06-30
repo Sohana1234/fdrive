@@ -1,4 +1,5 @@
 import { S3Client } from "@/utils/s3";
+import {listObjects} from '@/utils/aws';
 
 async function getCurrentBucket(context) {
   const { request, env } = context;
@@ -22,7 +23,7 @@ async function getCurrentBucket(context) {
         new Promise<string>((resolve, reject) => {
           client
             .s3_fetch(
-              `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${name}/_$flaredrive$/CNAME`
+              `https://${name}.${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/_$flaredrive$/CNAME`
             )
             .then((response) => response.text())
             .then((text) => {
@@ -44,7 +45,7 @@ export async function onRequestGet(context) {
     const { request, env } = context;
 
     const url = new URL(request.url);
-    if (url.searchParams.has("current")) return await getCurrentBucket(context);
+    if (url.searchParams.has("current")) return await listObjects(context);
 
     const client = new S3Client(
       env.NEW_ACCESS_KEY_ID,
@@ -53,6 +54,7 @@ export async function onRequestGet(context) {
     return client.s3_fetch(
       `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
     );
+   
   } catch (e) {
     return new Response(e.toString(), { status: 500 });
   }
