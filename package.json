@@ -20,6 +20,7 @@
     "wrangler": "^2.6.2"
   },
   "dependencies": {
+    "aws-sdk": "^2.1651.0",
     "uuid": "^10.0.0"
   }
 }
