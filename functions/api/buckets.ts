@@ -1,6 +1,5 @@
 import { S3Client } from "@/utils/s3";
 
-
 async function getCurrentBucket(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -10,8 +9,9 @@ async function getCurrentBucket(context) {
     await env[driveid].put("_$flaredrive$/CNAME", url.hostname);
 
   const client = new S3Client(env.NEW_ACCESS_KEY_ID, env.NEW_SECRET_ACCESS_KEY);
+  console.log("client",env);
   const bucketsResponse = await client.s3_fetch(
-    `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com`
+    `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
   );
   const bucketsText = await bucketsResponse.text();
   const bucketNames = [
@@ -23,7 +23,7 @@ async function getCurrentBucket(context) {
         new Promise<string>((resolve, reject) => {
           client
             .s3_fetch(
-              `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${name}`
+              `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/${name}/_$flaredrive$/CNAME`
             )
             .then((response) => response.text())
             .then((text) => {
@@ -45,18 +45,15 @@ export async function onRequestGet(context) {
     const { request, env } = context;
 
     const url = new URL(request.url);
+    if (url.searchParams.has("current")) return await getCurrentBucket(context);
+
     const client = new S3Client(
       env.NEW_ACCESS_KEY_ID,
       env.NEW_SECRET_ACCESS_KEY
     );
-    if (url.searchParams.has("current")) return client.s3_fetch(`https://uploader.${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
-    );
-
-    
     return client.s3_fetch(
       `https://${env.NEW_CF_ACCOUNT_ID}.r2.cloudflarestorage.com/`
     );
-   
   } catch (e) {
     return new Response(e.toString(), { status: 500 });
   }
