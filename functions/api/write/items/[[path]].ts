@@ -1,8 +1,8 @@
 import { notFound, parseBucketPath } from "@/utils/bucket";
 
-console.log("-----CONSOLE-----", context)
-
 export async function onRequestPostCreateMultipart(context) {
+  console.log("-----CONSOLE-----", context);
+
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
 
@@ -28,6 +28,8 @@ export async function onRequestPostCreateMultipart(context) {
 }
 
 export async function onRequestPostCompleteMultipart(context) {
+  console.log("-----CONSOLE-----", context);
+
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
 
@@ -49,6 +51,7 @@ export async function onRequestPostCompleteMultipart(context) {
 }
 
 export async function onRequestPost(context) {
+  console.log("-----CONSOLE-----", context);
   const url = new URL(context.request.url);
   const searchParams = new URLSearchParams(url.search);
 
@@ -64,6 +67,7 @@ export async function onRequestPost(context) {
 }
 
 export async function onRequestPutMultipart(context) {
+  console.log("-----CONSOLE-----", context);
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
 
@@ -90,6 +94,7 @@ export async function onRequestPutMultipart(context) {
 }
 
 export async function onRequestPut(context) {
+  console.log("-----CONSOLE-----", context);
   const url = new URL(context.request.url);
 
   if (new URLSearchParams(url.search).has("uploadId")) {
@@ -125,6 +130,7 @@ export async function onRequestPut(context) {
 }
 
 export async function onRequestDelete(context) {
+  console.log("-----CONSOLE-----", context);
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
 
