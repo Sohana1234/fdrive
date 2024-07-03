@@ -102,9 +102,9 @@ export async function onRequestPut(context) {
   }
 
   const [bucket, path] = parseBucketPath(context);
-  if (!bucket) return notFound();
 
   console.log("-----After bucket-----", bucket);
+  if (!bucket) return notFound();
 
   const request: Request = context.request;
 
