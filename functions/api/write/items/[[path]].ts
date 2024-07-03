@@ -1,5 +1,7 @@
 import { notFound, parseBucketPath } from "@/utils/bucket";
 
+console.log("-----CONSOLE-----", context)
+
 export async function onRequestPostCreateMultipart(context) {
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
