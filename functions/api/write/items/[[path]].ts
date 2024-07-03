@@ -94,7 +94,7 @@ export async function onRequestPutMultipart(context) {
 }
 
 export async function onRequestPut(context) {
-  console.log("-----CONSOLE-----", context);
+  console.log("-----CONSOLE-----", context.env);
   const url = new URL(context.request.url);
 
   if (new URLSearchParams(url.search).has("uploadId")) {
@@ -104,7 +104,7 @@ export async function onRequestPut(context) {
   const [bucket, path] = parseBucketPath(context);
   if (!bucket) return notFound();
 
-  console.log("-----After bucket-----");
+  console.log("-----After bucket-----", bucket);
 
   const request: Request = context.request;
 
