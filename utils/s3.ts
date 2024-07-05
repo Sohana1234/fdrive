@@ -8,5 +8,3 @@ export const s3 = new S3Client({
         secretAccessKey: process.env.NEW_SECRET_ACCESS_KEY || '',
     },
 });
-
-console.log('-----CONSOLE-----', process.env.NEW_ACCESS_KEY_ID, process.env.NEW_CF_ACCOUNT_ID);

@@ -98,7 +98,8 @@ export async function onRequestPutMultipart(context) {
 
 export async function onRequestPut(context) {
   console.log("-----CONSOLE-----", context.env);
-  console.log("-----CONSOLE CLIENT-----", s3);
+  
+console.log('-----CONSOLE PROCESS-----', process.env.NEW_ACCESS_KEY_ID, process.env.NEW_CF_ACCOUNT_ID);
   const url = new URL(context.request.url);
 
   if (new URLSearchParams(url.search).has("uploadId")) {
