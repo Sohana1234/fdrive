@@ -1,5 +1,6 @@
 import { notFound, parseBucketPath } from "@/utils/bucket";
-import { S3Client } from "@/utils/s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { s3 } from "@/utils/s3";
 
 export async function onRequestPostCreateMultipart(context) {
   console.log("-----CONSOLE-----", context);
@@ -19,6 +20,7 @@ export async function onRequestPostCreateMultipart(context) {
     },
     customMetadata,
   });
+
 
   return new Response(
     JSON.stringify({
@@ -96,11 +98,7 @@ export async function onRequestPutMultipart(context) {
 
 export async function onRequestPut(context) {
   console.log("-----CONSOLE-----", context.env);
-  const client = new S3Client(
-    context.env.NEW_ACCESS_KEY_ID,
-    context.env.NEW_SECRET_ACCESS_KEY
-  );
-  console.log("-----CONSOLE CLIENT-----", client);
+  console.log("-----CONSOLE CLIENT-----", s3);
   const url = new URL(context.request.url);
 
   if (new URLSearchParams(url.search).has("uploadId")) {
